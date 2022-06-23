@@ -39,7 +39,12 @@ def autenticar():
          autenticado = True
          break
         indice = indice + 1
-      return flask.render_template("index.html",datos={"autenticado":autenticado})
+    if (autenticado == True):  
+     return flask.render_template("index.html",datos={"autenticado":autenticado})
+    else:
+     flask.flash("Usuario Incorrecto")
+     return flask.redirect(flask.url_for("pagina_principal"))
+        
 
    
 @app.route("/registro",methods=["GET","POST"])
@@ -53,11 +58,13 @@ def registrar():
       usuarios.append(usuario)
       contraseñas.append(contraseña)
 
+      flask.flash("Se ha registrado correctamente")
+
       return flask.redirect(flask.url_for("pagina_principal"))    
 
-    flask.flash("Se ha registrado correctamente")
+    
 
-    return flask.render_template("resultado.html",datos={"autenticado":False})
+    
 
 # routes
 @app.route('/')
