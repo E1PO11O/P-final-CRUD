@@ -1,3 +1,4 @@
+import flask
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mysqldb import MySQL
 
@@ -13,6 +14,50 @@ mysql = MySQL(app)
 
 # settings
 app.secret_key = "mysecretkey"
+
+
+usuarios = ["admin"]
+contraseñas = ["admin"]
+
+@app.route("/",methods=["GET","POST"])
+def pagina_principal():
+    return flask.render_template("login.html", datos={} )
+
+@app.route("/autenticacion",methods=["GET","POST"])
+def autenticar():
+    global usuarios, contraseñas 
+
+    autenticado = False
+
+    if(flask.request.method == "POST"):
+      usuario = flask.request.form["usuario1"]
+      contraseña = flask.request.form["contraseña1"]
+
+      indice = 0
+      while(indice < len(usuarios)):
+        if(usuario == usuarios[indice] and contraseña == contraseñas[indice]):
+         autenticado = True
+         break
+        indice = indice + 1
+      return flask.render_template("index.html",datos={"autenticado":autenticado})
+
+   
+@app.route("/registro",methods=["GET","POST"])
+def registrar():
+    global usuarios, contraseñas
+
+    if(flask.request.method == "POST"):
+      usuario = flask.request.form["usuario2"]
+      contraseña = flask.request.form["contraseña2"]
+
+      usuarios.append(usuario)
+      contraseñas.append(contraseña)
+
+      return flask.redirect(flask.url_for("pagina_principal"))    
+
+    flask.flash("Se ha registrado correctamente")
+
+    return flask.render_template("resultado.html",datos={"autenticado":False})
 
 # routes
 @app.route('/')
