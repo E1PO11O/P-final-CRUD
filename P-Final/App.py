@@ -40,7 +40,7 @@ def autenticar():
          break
         indice = indice + 1
     if (autenticado == True):  
-     return flask.render_template("index.html",datos={"autenticado":autenticado})
+     return redirect ("/d")
     else:
      flask.flash("Usuario Incorrecto")
      return flask.redirect(flask.url_for("pagina_principal"))
@@ -67,7 +67,7 @@ def registrar():
     
 
 # routes
-@app.route('/')
+@app.route('/d')
 def Index():
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM contacts')
